@@ -45,23 +45,23 @@ export enum LightingEffectType {
 }
 
 export enum LightEffectPresetEnum {
-  Aurora,
-  BubblingCauldron,
-  CandyCane,
-  Christmas,
-  Flicker,
-  GrandmasChristmasLights,
-  Hanukkah,
-  HauntedMansion,
-  Icicle,
-  Lightning,
-  Ocean,
-  Rainbow,
-  Raindrop,
-  Spring,
-  Sunrise,
-  Sunset,
-  Valentines,
+  AURORA,
+  BUBBLINGCAULDRON,
+  CANDYCANE,
+  CHRISTMAS,
+  FLICKER,
+  GRANDMASCHRISTMASLIGHTS,
+  HANUKKAH,
+  HAUNTEDMANSION,
+  ICICLE,
+  LIGHTNING,
+  OCEAN,
+  RAINBOW,
+  RAINDROP,
+  SPRING,
+  SUNRISE,
+  SUNSET,
+  VALENTINES,
 }
 
 export class LightEffect {
@@ -225,39 +225,39 @@ export class LightEffect {
 export class LightEffectPreset {
   static from(preset: LightEffectPresetEnum): LightEffect {
     switch (preset) {
-      case LightEffectPresetEnum.Aurora:
+      case LightEffectPresetEnum.AURORA:
         return this.aurora();
-      case LightEffectPresetEnum.BubblingCauldron:
+      case LightEffectPresetEnum.BUBBLINGCAULDRON:
         return this.bubblingCauldron();
-      case LightEffectPresetEnum.CandyCane:
+      case LightEffectPresetEnum.CANDYCANE:
         return this.candyCane();
-      case LightEffectPresetEnum.Christmas:
+      case LightEffectPresetEnum.CHRISTMAS:
         return this.christmas();
-      case LightEffectPresetEnum.Flicker:
+      case LightEffectPresetEnum.FLICKER:
         return this.flicker();
-      case LightEffectPresetEnum.GrandmasChristmasLights:
+      case LightEffectPresetEnum.GRANDMASCHRISTMASLIGHTS:
         return this.grandmasChristmasLights();
-      case LightEffectPresetEnum.Hanukkah:
+      case LightEffectPresetEnum.HANUKKAH:
         return this.hanukkah();
-      case LightEffectPresetEnum.HauntedMansion:
+      case LightEffectPresetEnum.HAUNTEDMANSION:
         return this.hauntedMansion();
-      case LightEffectPresetEnum.Icicle:
+      case LightEffectPresetEnum.ICICLE:
         return this.icicle();
-      case LightEffectPresetEnum.Lightning:
+      case LightEffectPresetEnum.LIGHTNING:
         return this.lightning();
-      case LightEffectPresetEnum.Ocean:
+      case LightEffectPresetEnum.OCEAN:
         return this.ocean();
-      case LightEffectPresetEnum.Rainbow:
+      case LightEffectPresetEnum.RAINBOW:
         return this.rainbow();
-      case LightEffectPresetEnum.Raindrop:
+      case LightEffectPresetEnum.RAINDROP:
         return this.raindrop();
-      case LightEffectPresetEnum.Spring:
+      case LightEffectPresetEnum.SPRING:
         return this.spring();
-      case LightEffectPresetEnum.Sunrise:
+      case LightEffectPresetEnum.SUNRISE:
         return this.sunrise();
-      case LightEffectPresetEnum.Sunset:
+      case LightEffectPresetEnum.SUNSET:
         return this.sunset();
-      case LightEffectPresetEnum.Valentines:
+      case LightEffectPresetEnum.VALENTINES:
         return this.valentines();
       default:
         throw Error("Invalid lighting effect")
