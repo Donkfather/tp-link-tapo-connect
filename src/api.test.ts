@@ -1,30 +1,30 @@
 import { cloudLogin, loginDevice, loginDeviceByIp } from './api';
 import { checkError } from './tapo-utils';
 
-const email = "<TP LINK ACCOUNT EMAIL>";
-const password = "<TP LINK ACCOUNT PASSWORD>";
-const deviceIp = "192.168.0.62";
+const email = process.env.TAPO_USERNAME;
+const password = process.env.TAPO_PASSWORD;
+const deviceIp = process.env.TAPO_IP_ADDRESS;
 
 xtest('Login using ENV Vars & list devices', async () => {
     const cloudApi = await cloudLogin();
-    
+
     const devices = await cloudApi.listDevices();
     console.log(devices);
 });
 
 xtest('Login & list devices', async () => {
     const cloudApi = await cloudLogin(email, password);
-    
+
     const devices = await cloudApi.listDevices();
     console.log(devices);
 });
 
 xtest('List smart plugs', async () => {
     const cloudApi = await cloudLogin(email, password);
-    
+
     const devices = await cloudApi.listDevicesByType('SMART.TAPOPLUG');
     console.log(devices);
-    
+
     const smartPlug = devices[0];
     console.log(smartPlug);
 
@@ -36,10 +36,10 @@ xtest('List smart plugs', async () => {
 
 xtest('List smart bulbs', async () => {
     const cloudApi = await cloudLogin(email, password);
-    
+
     const devices = await cloudApi.listDevicesByType('SMART.TAPOBULB');
     console.log(devices);
-    
+
     const smartBulb = devices[0];
     console.log(smartBulb);
 
@@ -50,7 +50,7 @@ xtest('List smart bulbs', async () => {
 
 test('Turn device on', async () => {
     const device = await loginDeviceByIp(email, password, deviceIp);
-    
+
     const getDeviceInfoResponse = await device.getDeviceInfo();
     console.log(getDeviceInfoResponse);
 
@@ -59,10 +59,10 @@ test('Turn device on', async () => {
 
 xtest('Set bulb colour', async () => {
     const cloudApi = await cloudLogin(email, password);
-    
+
     const devices = await cloudApi.listDevicesByType('SMART.TAPOBULB');
     console.log(devices);
-    
+
     const smartBulb = devices[0];
     console.log(smartBulb);
 

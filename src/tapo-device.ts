@@ -1,66 +1,88 @@
-import { getColour } from "./colour-helper"
-import { base64Decode } from "./tplink-cipher"
-import { TapoDeviceInfo, TapoProtocol } from "./types"
+import {getColour} from "./colour-helper"
+import {base64Decode} from "./tplink-cipher"
+import {LightComponentsInput, TapoDeviceInfo, TapoProtocol} from "./types"
+import {valid} from "./validation";
 
-export const TapoDevice = ({ send }: TapoProtocol) => {
+export const TapoDevice = ({send}: TapoProtocol) => {
 
-    const setDeviceOn = async (deviceOn: boolean = true) => {
-        const turnDeviceOnRequest = {
-          "method": "set_device_info",
-          "params":{
-            "device_on": deviceOn,
-          }
-        }
-        await send(turnDeviceOnRequest)
+  const setDeviceOn = async (deviceOn: boolean = true) => {
+    const turnDeviceOnRequest = {
+      "method": "set_device_info",
+      "params": {
+        "device_on": deviceOn,
       }
-
-      const augmentTapoDeviceInfo = (deviceInfo: TapoDeviceInfo): TapoDeviceInfo => {
-        return {
-          ...deviceInfo,
-          ssid: base64Decode(deviceInfo.ssid),
-          nickname: base64Decode(deviceInfo.nickname),
-        }
     }
+    await send(turnDeviceOnRequest)
+  }
 
+  const augmentTapoDeviceInfo = (deviceInfo: TapoDeviceInfo): TapoDeviceInfo => {
     return {
-      turnOn: () => setDeviceOn(true),
-
-      turnOff: () => setDeviceOn(false),
-
-      setBrightness: async (brightnessLevel: number = 100) => {
-        const setBrightnessRequest = {
-          "method": "set_device_info",
-          "params":{
-            "brightness": brightnessLevel,
-          }
-        }
-        await send(setBrightnessRequest)
-      },
-
-      setColour: async (colour: string = 'white') => {
-        const params = getColour(colour);
-
-        const setColourRequest = {
-          "method": "set_device_info",
-          params
-        }
-        await send(setColourRequest)
-      },
-
-      send,
-
-      getDeviceInfo:async (): Promise<TapoDeviceInfo> => {
-        const statusRequest = {
-          "method": "get_device_info"
-        }
-        return augmentTapoDeviceInfo(await send(statusRequest))
-      },
-
-      getEnergyUsage: async (): Promise<TapoDeviceInfo> => {
-        const statusRequest = {
-          "method": "get_energy_usage"
-        }
-        return await send(statusRequest)
-      }
+      ...deviceInfo,
+      ssid: base64Decode(deviceInfo.ssid),
+      nickname: base64Decode(deviceInfo.nickname),
     }
+  }
+  const setLightComponents = async (components: LightComponentsInput) => {
+      if (Object.keys(components).length === 0) {
+        throw new Error("At least one of the properties has to be set.");
+      }
+
+      const validParams: LightComponentsInput = {};
+      Object.entries(components).forEach(([key, value]) => {
+        if (value !== undefined && valid(key, value)) {
+          validParams[key as keyof LightComponentsInput] = value as number;
+        }
+      });
+
+      const setLightComponentsRequest = {
+        method: "set_device_info",
+        params: validParams,
+      }
+      await send(setLightComponentsRequest);
+    }
+
+  return {
+    send,
+
+    setLightComponents,
+
+    turnOn: () => setDeviceOn(true),
+
+    turnOff: () => setDeviceOn(false),
+
+    setBrightness: async (brightnessLevel: number = 100) => {
+      await setLightComponents({brightness: brightnessLevel});
+    },
+
+    setColour: async (colour: string = 'white') => {
+      const params = getColour(colour);
+      await setLightComponents(params);
+    },
+
+    setHue: async (hue: number) => {
+      await setLightComponents({hue});
+    },
+
+    setSaturation: async (saturation: number) => {
+      await setLightComponents({saturation});
+    },
+
+    setColorTemp: async (color_temp: number) => {
+      await setLightComponents({color_temp});
+    },
+
+    getDeviceInfo: async (): Promise<TapoDeviceInfo> => {
+      const statusRequest = {
+        "method": "get_device_info"
+      }
+      return augmentTapoDeviceInfo(await send(statusRequest))
+    },
+
+    getEnergyUsage: async (): Promise<TapoDeviceInfo> => {
+      const statusRequest = {
+        "method": "get_energy_usage"
+      }
+      return await send(statusRequest)
+    }
+  }
 }
