@@ -2,7 +2,7 @@ import {getColour} from "./colour-helper"
 import {base64Decode} from "./tplink-cipher"
 import {LightComponentsInput, TapoDeviceInfo, TapoProtocol} from "./types"
 import {valid} from "./validation";
-import {LightEffect} from "./light-effect";
+import {LightEffect, LightEffectPreset, LightEffectPresetEnum} from "./light-effect";
 
 export const TapoDevice = ({send}: TapoProtocol) => {
 
@@ -73,8 +73,14 @@ export const TapoDevice = ({send}: TapoProtocol) => {
     },
 
     setLightingEffect: async (
-      lightingEffect: LightEffect,
+      effect: string | LightEffect,
     ) => {
+      let lightingEffect: LightEffect
+      if (typeof effect === 'string') {
+        lightingEffect = LightEffectPreset.from(LightEffectPresetEnum[effect.toUpperCase()]);
+      } else {
+        lightingEffect = effect
+      }
       await send({
         method: "set_lighting_effect",
         params: lightingEffect.toJson()

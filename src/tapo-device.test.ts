@@ -56,7 +56,7 @@ describe('setLightComponents', () => {
     await testLightComponent(device, "color_temp", 6500);
   })
 
-  xit('can set effect', async() => {
+  it('can set effect', async() => {
     const device = await loginDeviceByIp(email, password, deviceIp);
     await device.setLightingEffect(LightEffectPreset.from(LightEffectPresetEnum.Raindrop))
     console.log(await device.getDeviceInfo())

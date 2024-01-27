@@ -259,6 +259,8 @@ export class LightEffectPreset {
         return this.sunset();
       case LightEffectPresetEnum.Valentines:
         return this.valentines();
+      default:
+        throw Error("Invalid lighting effect")
     }
   }
 
