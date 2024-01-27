@@ -2,6 +2,7 @@ import {getColour} from "./colour-helper"
 import {base64Decode} from "./tplink-cipher"
 import {LightComponentsInput, TapoDeviceInfo, TapoProtocol} from "./types"
 import {valid} from "./validation";
+import {LightEffect} from "./light-effect";
 
 export const TapoDevice = ({send}: TapoProtocol) => {
 
@@ -23,23 +24,23 @@ export const TapoDevice = ({send}: TapoProtocol) => {
     }
   }
   const setLightComponents = async (components: LightComponentsInput) => {
-      if (Object.keys(components).length === 0) {
-        throw new Error("At least one of the properties has to be set.");
-      }
-
-      const validParams: LightComponentsInput = {};
-      Object.entries(components).forEach(([key, value]) => {
-        if (value !== undefined && valid(key, value)) {
-          validParams[key as keyof LightComponentsInput] = value as number;
-        }
-      });
-
-      const setLightComponentsRequest = {
-        method: "set_device_info",
-        params: validParams,
-      }
-      await send(setLightComponentsRequest);
+    if (Object.keys(components).length === 0) {
+      throw new Error("At least one of the properties has to be set.");
     }
+
+    const validParams: LightComponentsInput = {};
+    Object.entries(components).forEach(([key, value]) => {
+      if (value !== undefined && valid(key, value)) {
+        validParams[key as keyof LightComponentsInput] = value as number;
+      }
+    });
+
+    const setLightComponentsRequest = {
+      method: "set_device_info",
+      params: validParams,
+    }
+    await send(setLightComponentsRequest);
+  }
 
   return {
     send,
@@ -69,6 +70,15 @@ export const TapoDevice = ({send}: TapoProtocol) => {
 
     setColorTemp: async (color_temp: number) => {
       await setLightComponents({color_temp});
+    },
+
+    setLightingEffect: async (
+      lightingEffect: LightEffect,
+    ) => {
+      await send({
+        method: "set_lighting_effect",
+        params: lightingEffect.toJson()
+      })
     },
 
     getDeviceInfo: async (): Promise<TapoDeviceInfo> => {

@@ -1,5 +1,6 @@
 import {loginDeviceByIp} from "./api";
 import {TapoDeviceLightInfo} from "./types";
+import {LightEffectPreset, LightEffectPresetEnum} from "./light-effect";
 
 const email = process.env.TAPO_USERNAME;
 const password = process.env.TAPO_PASSWORD;
@@ -55,4 +56,9 @@ describe('setLightComponents', () => {
     await testLightComponent(device, "color_temp", 6500);
   })
 
+  xit('can set effect', async() => {
+    const device = await loginDeviceByIp(email, password, deviceIp);
+    await device.setLightingEffect(LightEffectPreset.from(LightEffectPresetEnum.Raindrop))
+    console.log(await device.getDeviceInfo())
+  })
 })

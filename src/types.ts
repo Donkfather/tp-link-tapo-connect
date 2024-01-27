@@ -100,3 +100,4 @@ export type LightComponentsInput = {
   brightness?: number,
   color_temp?: number
 };
+
